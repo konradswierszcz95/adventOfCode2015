@@ -22,4 +22,8 @@ public class ElvesPackage {
     public int countRequiredPaper() {
         return 3 * shortSide * mediumSide + 2 * shortSide * longSide + 2 * mediumSide * longSide;
     }
+
+    public int countRibbon() {
+        return 2 * shortSide + 2 * mediumSide + shortSide * mediumSide * longSide;
+    }
 }
