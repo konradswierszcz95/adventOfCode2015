@@ -18,17 +18,6 @@ class Solution {
     }
 
     private static void insertDirectValues(List<SignalOperation> operations, Map<String, Integer> operationMap) {
-        var kown = operations.stream()
-                .filter(SignalOperation::areInputsNumerical)
-                .toList().size();
-        System.out.println(kown);
-
-        var direct = operations.stream()
-                        .filter(operation -> operation.getOperationType().equals(OperationType.DIRECT))
-                        .filter(SignalOperation::areInputsNumerical)
-                                .count();
-        System.out.println(direct);
-
         operations.stream()
                 .filter(operation -> operation.getOperationType().equals(OperationType.DIRECT))
                 .filter(SignalOperation::areInputsNumerical)
