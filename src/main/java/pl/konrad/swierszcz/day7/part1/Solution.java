@@ -31,7 +31,10 @@ class Solution {
                     .toList();
 
             ableToFill.forEach(
-                    operation -> operationMap.put(operation.getOutputName(), getSignalValue(operation, operationMap))
+                    operation -> {
+                        fillSignalOperationData(operation, operationMap.get(operation.getFirstInputName()), operationMap.getOrDefault(operation.getSecondInputName(), null));
+                        operationMap.put(operation.getOutputName(), getSignalValue(operation, operationMap));
+                    }
             );
         }
     }
@@ -46,6 +49,11 @@ class Solution {
                 operationMap.containsKey(operation.getSecondInputName());
 
         return isFirstInputKnown && isSecondInputKnown;
+    }
+
+    private static void fillSignalOperationData(SignalOperation operation, Integer firstInputValue, Integer secondInputValue) {
+        operation.setFirstInputValue(firstInputValue);
+        operation.setSecondInputValue(secondInputValue);
     }
 
     private static int getSignalValue(SignalOperation operation, Map<String, Integer> actualMapContent) {
