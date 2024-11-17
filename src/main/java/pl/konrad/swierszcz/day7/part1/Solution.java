@@ -49,13 +49,15 @@ class Solution {
     }
 
     private static int getSignalValue(SignalOperation operation, Map<String, Integer> actualMapContent) {
+        var firstInputValue = operation.getFirstInputValue() != null ? operation.getFirstInputValue() : actualMapContent.get(operation.getFirstInputName());
+        var secondInputValue = operation.getSecondInputValue() != null ? operation.getSecondInputValue() : actualMapContent.getOrDefault(operation.getSecondInputName(), null);
         return switch (operation.getOperationType()) {
-            case DIRECT -> actualMapContent.get(operation.getFirstInputName());
-            case AND -> getAndValue(actualMapContent.get(operation.getFirstInputName()), actualMapContent.get(operation.getSecondInputName()));
-            case OR -> getOrValue(actualMapContent.get(operation.getFirstInputName()), actualMapContent.get(operation.getSecondInputName()));
-            case NOT -> getNotValue(actualMapContent.get(operation.getFirstInputName()));
-            case LEFT_SHIFT -> getLeftShiftedValue(actualMapContent.get(operation.getFirstInputName()), operation.getShiftValue());
-            case RIGHT_SHIFT -> getRightShiftedValue(actualMapContent.get(operation.getFirstInputName()), operation.getShiftValue());
+            case DIRECT -> firstInputValue;
+            case AND -> getAndValue(firstInputValue, secondInputValue);
+            case OR -> getOrValue(firstInputValue, secondInputValue);
+            case NOT -> getNotValue(firstInputValue);
+            case LEFT_SHIFT -> getLeftShiftedValue(firstInputValue, operation.getShiftValue());
+            case RIGHT_SHIFT -> getRightShiftedValue(firstInputValue, operation.getShiftValue());
         };
     }
 
