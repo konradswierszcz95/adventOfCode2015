@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day7.part1;
+package pl.konrad.swierszcz.day7.part2;
 
 import pl.konrad.swierszcz.day7.OperationType;
 import pl.konrad.swierszcz.day7.SignalOperation;
@@ -16,6 +16,7 @@ class Solution {
                 .toList();
 
         Map<String, Integer> signalValues = new HashMap<>(input.size());
+        signalValues.put("b", 956);
         insertDirectValues(decodedOperations, signalValues);
         insertModifiedValues(decodedOperations, signalValues);
 
@@ -24,6 +25,7 @@ class Solution {
 
     private static void insertDirectValues(List<SignalOperation> operations, Map<String, Integer> operationMap) {
         operations.stream()
+                .filter(operation -> !operationMap.containsKey(operation.getOutputName()))
                 .filter(operation -> operation.getOperationType().equals(OperationType.DIRECT))
                 .filter(SignalOperation::areInputsNumerical)
                 .forEach(operation -> operationMap.put(operation.getOutputName(), operation.getFirstInputValue()));

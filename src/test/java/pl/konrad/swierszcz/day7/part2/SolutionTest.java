@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day7.part1;
+package pl.konrad.swierszcz.day7.part2;
 
 import org.junit.jupiter.api.Test;
 import pl.konrad.swierszcz.InputReader;
@@ -12,6 +12,6 @@ class SolutionTest {
         //given
         //when//then
         assertThat(Solution.getASignalValue(InputReader.readInput("day7/input.txt")))
-                .isEqualTo(956);
+                .isEqualTo(40149);
     }
 }

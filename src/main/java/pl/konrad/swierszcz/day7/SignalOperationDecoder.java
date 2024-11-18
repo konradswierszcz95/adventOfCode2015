@@ -1,6 +1,6 @@
-package pl.konrad.swierszcz.day7.part1;
+package pl.konrad.swierszcz.day7;
 
-class SignalOperationDecoder {
+public class SignalOperationDecoder {
     public static SignalOperation decodeOperation(String instruction) {
         var operationType = findOperationType(instruction);
         return switch (operationType) {
@@ -85,7 +85,7 @@ class SignalOperationDecoder {
         return new SignalOperation(
                 OperationType.NOT,
                 split[3],
-                mapInputValue(split[0]),
+                mapInputValue(split[1]),
                 new InputSignal(SignalTypes.EMPTY, null, null),
                 null
         );

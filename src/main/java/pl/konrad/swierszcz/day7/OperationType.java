@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day7.part1;
+package pl.konrad.swierszcz.day7;
 
 public enum OperationType {
     DIRECT,
