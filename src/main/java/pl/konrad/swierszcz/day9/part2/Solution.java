@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day9.part1;
+package pl.konrad.swierszcz.day9.part2;
 
 import pl.konrad.swierszcz.day9.Distance;
 import pl.konrad.swierszcz.day9.DistanceEncoder;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class Solution {
 
-    public static int shortestDistanceBetweenLocations(List<String> inputs) {
+    public static int longestDistanceBetweenLocations(List<String> inputs) {
         var distances = inputs.stream()
                 .map(DistanceEncoder::encodeStringDistance)
                 .collect(Collectors.toSet());
@@ -25,7 +25,7 @@ public class Solution {
         return cities.stream()
                 .map(city -> getShortestPathWithoutReturn(city, Map.of(city, 0), distances, cities, pathLength))
                 .mapToInt(i -> i)
-                .min().orElseThrow(NoSuchElementException::new);
+                .max().orElseThrow(NoSuchElementException::new);
     }
 
     private static int getShortestPathWithoutReturn(String actualPosition, Map<String, Integer> path, Set<Distance> distances, Set<String> places, int pathLength) {
@@ -55,7 +55,7 @@ public class Solution {
                         pathLength
                 ))
                 .mapToInt(i -> i)
-                .min().orElseThrow(RuntimeException::new);
+                .max().orElseThrow(RuntimeException::new);
     }
 
     private static Map<String, Integer> connectPlaces(String actualPosition, Distance usedConnection, Map<String, Integer> path) {

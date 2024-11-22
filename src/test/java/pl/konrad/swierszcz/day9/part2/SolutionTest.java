@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day9.part1;
+package pl.konrad.swierszcz.day9.part2;
 
 import org.junit.jupiter.api.Test;
 import pl.konrad.swierszcz.InputReader;
@@ -11,16 +11,16 @@ class SolutionTest {
     void shouldReturnDifferenceEqualToAoCAnswer() {
         //given
         //when//then
-        assertThat(Solution.shortestDistanceBetweenLocations(InputReader.readInput("day9/input.txt")))
-                .isEqualTo(141);
+        assertThat(Solution.longestDistanceBetweenLocations(InputReader.readInput("day9/input.txt")))
+                .isEqualTo(736);
     }
 
     @Test
     void shouldReturnDifferenceShouldBeCorrectForTestData() {
         //given
         //when//then
-        assertThat(Solution.shortestDistanceBetweenLocations(InputReader.readInput("day9/testInput.txt")))
-                .isEqualTo(605);
+        assertThat(Solution.longestDistanceBetweenLocations(InputReader.readInput("day9/testInput.txt")))
+                .isEqualTo(982);
     }
 
     @Test
@@ -28,7 +28,7 @@ class SolutionTest {
         //http://algorytmy.ency.pl/artykul/algorytm_helda_karpa
         //given
         //when//then
-        assertThat(Solution.shortestDistanceBetweenLocations(InputReader.readInput("day9/testInput2.txt")))
-                .isEqualTo(90);
+        assertThat(Solution.longestDistanceBetweenLocations(InputReader.readInput("day9/testInput2.txt")))
+                .isEqualTo(153);
     }
 }
