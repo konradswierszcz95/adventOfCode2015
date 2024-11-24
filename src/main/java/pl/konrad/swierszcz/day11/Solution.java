@@ -1,5 +1,6 @@
 package pl.konrad.swierszcz.day11;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,7 +8,7 @@ import java.util.regex.Pattern;
 public class Solution {
 
     private static final List<String> FORBIDDEN_CHARACTERS = List.of("i", "o", "l");
-    private static final Pattern GROUPS_OF_TWO_PATTERN = Pattern.compile("(.)\\1{2,}");
+    private static final Pattern GROUPS_OF_TWO_PATTERN = Pattern.compile("(.)\\1");
 
     public static String getNextCorrectPassword(String actualPassword) {
         String password = incrementPassword(actualPassword);
@@ -62,6 +63,7 @@ public class Solution {
         return String.valueOf(chars);
     }
 
+    //todo: fix should consider bigger pair as most important (now smallest block it [beginning of method])
     private static String setClosestPairs(String password) {
         var chars = password.toCharArray();
 
@@ -78,8 +80,8 @@ public class Solution {
         chars[chars.length - 3] = secondPairCharacter;
         chars[chars.length - 4] = secondPairCharacter;
 
-        chars[chars.length - 1] = 'a';
-        chars[chars.length - 2] = 'a';
+        chars[chars.length - 1] = secondPairCharacter != 'a' ? 'a' : 'b';
+        chars[chars.length - 2] = secondPairCharacter != 'a' ? 'a' : 'b';
 
         return String.valueOf(chars);
     }
@@ -118,8 +120,15 @@ public class Solution {
     }
 
     private static boolean hasTwoDifferentPairs(String password) {
-        Matcher match = GROUPS_OF_TWO_PATTERN.matcher(password);
+        Matcher matcher = GROUPS_OF_TWO_PATTERN.matcher(password);
 
-        return match.namedGroups().size() >= 2;
+        var result = new ArrayList<String>();
+
+        while (matcher.find()) {
+            result.add(matcher.group());
+        }
+
+        return result.stream().distinct()
+                .count() >= 2;
     }
 }
