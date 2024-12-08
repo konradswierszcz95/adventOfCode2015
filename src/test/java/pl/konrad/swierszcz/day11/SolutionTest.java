@@ -15,8 +15,16 @@ class SolutionTest {
     void shouldReturnDifferenceEqualToAoCAnswerPartOne() {
         //given
         //when//then
-        assertThat(Solution.getNextCorrectPassword("vzbxkghb"))
-                .isEqualTo("");
+        assertThat(MapSolution.initGettingNextCorrectPassword("vzbxkghb"))
+                .isEqualTo("vzbxxyzz");
+    }
+
+    @Test
+    void shouldReturnDifferenceEqualToAoCAnswerPartTwo() {
+        //given
+        //when//then
+        assertThat(MapSolution.initGettingNextCorrectPassword("vzbxxyzz"))
+                .isEqualTo("vzcaabcc");
     }
 
     @ParameterizedTest
@@ -24,7 +32,7 @@ class SolutionTest {
     void shouldReturnDifferenceShouldBeCorrectForTestData(String input, String result) {
         //given
         //when//then
-        assertThat(Solution.getNextCorrectPassword(input))
+        assertThat(MapSolution.initGettingNextCorrectPassword(input))
                 .isEqualTo(result);
     }
 
