@@ -5,14 +5,14 @@ import pl.konrad.swierszcz.InputReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SolutionTest {
+class SolutionTest {
 
     @Test
     void shouldReturnDifferenceEqualToAoCAnswer() {
         //given
         //when//then
         assertThat(Solution.getSumOfNumbers(InputReader.readInput("day12/input.txt")))
-                .isEqualTo(111754);
+                .isEqualTo(65402);
     }
 
     @Test

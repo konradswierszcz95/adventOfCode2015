@@ -3,9 +3,11 @@ package pl.konrad.swierszcz.day12.part2;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class Solution {
+class Solution {
+    private Solution() {}
+
     private static final Pattern NUMBER_PATTERN = Pattern.compile("-?\\d{1,}");
-    private static final Pattern RED_GROUP_PATTERN = Pattern.compile("red");
+    private static final Pattern RED_GROUP_PATTERN = Pattern.compile(":\"red");
 
     public static int getSumOfNumbers(List<String> input) {
         return input.stream()
@@ -26,22 +28,21 @@ public class Solution {
 
     private static int getRedGroupSum(String toSearch) {
         var matcher = RED_GROUP_PATTERN.matcher(toSearch);
-        int sum = 0;
         var exclusions = new ArrayList<Exclusion>();
 
         while (matcher.find()) {
             int exclusionBegin = findBracket(toSearch, matcher.start(), Direction.DECREMENT);
             int exclusionEnd = findBracket(toSearch, matcher.end(), Direction.INCREMENT);
-            exclusions.add(new Exclusion(exclusionBegin, exclusionEnd));
+            exclusions.add(new Exclusion(exclusionBegin, exclusionEnd, exclusionEnd - exclusionBegin));
         }
 
-        //todo: check overlapping, merge, than sum of substrings from each (merged) exclusion
-
-        return sum;
+        return mergeOverlappingExclusions(exclusions.stream().distinct().toList()).stream()
+                .mapToInt(e -> getNumberSum(toSearch.substring(e.getBegin(), e.getEnd() +1)))
+                .sum();
     }
 
     private static int findBracket(String toSearch, int startingPosition, Direction direction) {
-        Map<Character, Integer> bracketOccurrences = new HashMap<>(Map.of('[', 0, ']', 0, '{', 0, '}', 0));
+        Map<Character, Integer> bracketOccurrences = new HashMap<>(Map.of('{', 0, '}', 0));
 
         int actualPosition = startingPosition;
         while (getEndingStatement(bracketOccurrences, direction)) {
@@ -58,15 +59,38 @@ public class Solution {
 
     private static boolean getEndingStatement(Map<Character, Integer> brackets, Direction direction) {
         if (direction.equals(Direction.INCREMENT)) {
-            return (brackets.get('[') >= brackets.get(']') && Objects.equals(brackets.get('{'), brackets.get('}'))) ||
-                    (brackets.get('{') >= brackets.get('}') && Objects.equals(brackets.get('['), brackets.get(']')));
+            return brackets.get('{') >= brackets.get('}');
         }
 
-        return (brackets.get('[') <= brackets.get(']') && Objects.equals(brackets.get('{'), brackets.get('}'))) ||
-                (brackets.get('{') <= brackets.get('}') && Objects.equals(brackets.get('['), brackets.get(']')));
+        return brackets.get('{') <= brackets.get('}');
     }
 
-    private static List<Exclusion> mergeOverlappingExclusions(List<Exclusion> exclusions) {
-        
+    private static Set<Exclusion> mergeOverlappingExclusions(List<Exclusion> exclusions) {
+        var mergedExclusions = new HashSet<Exclusion>();
+        for (Exclusion ex: exclusions) {
+            var overLappingExclusions = exclusions.stream()
+                    .filter(ex::isOverlapping)
+                    .toList();
+
+            mergedExclusions.add(mergeExclusions(overLappingExclusions));
+        }
+
+        return mergedExclusions;
+    }
+
+    private static Exclusion mergeExclusions(List<Exclusion> exclusions) {
+        var sortedExclusions = exclusions.stream()
+                .sorted(Comparator.comparingInt(Exclusion::getSize).reversed())
+                .toList();
+        var exclusion = sortedExclusions.getFirst();
+        if (sortedExclusions.size() == 1) {
+            return exclusion;
+        }
+
+        for (int i = 1; i < sortedExclusions.size(); i++) {
+            exclusion = exclusion.merge(sortedExclusions.get(i));
+        }
+
+        return exclusion;
     }
 }

@@ -1,12 +1,16 @@
 package pl.konrad.swierszcz.day12.part2;
 
+import java.util.Objects;
+
 public class Exclusion {
     private final int begin;
     private final int end;
+    private final int size;
 
-    public Exclusion(int begin, int end) {
+    public Exclusion(int begin, int end, int size) {
         this.begin = begin;
         this.end = end;
+        this.size = size;
     }
 
     public int getBegin() {
@@ -17,15 +21,45 @@ public class Exclusion {
         return end;
     }
 
-    public boolean isOverlapping(Exclusion anotherExclusion) {
-        return (this.begin >= anotherExclusion.getBegin() && this.begin <= anotherExclusion.getEnd()) ||
-                (anotherExclusion.getBegin() >= this.begin && anotherExclusion.getEnd() <= this.end);
+    public int getSize() {
+        return size;
     }
 
-    public Exclusion merge(Exclusion anotherExclusion) {
-        if (!isOverlapping(anotherExclusion)) {
+    public boolean isOverlapping(Exclusion other) {
+        boolean isInternal = (other.begin >= begin && other.end <= end) || (begin >= other.begin && end <= other.end);
+        if (isInternal) {
+            return true;
+        }
+
+        return (begin < other.begin && end > other.begin) || (other.begin < begin && other.end > begin);
+    }
+
+    public Exclusion merge(Exclusion other) {
+        if (!isOverlapping(other)) {
             throw new RuntimeException("Exclusions are not overlapping and cannot be merged.");
         }
-        return new Exclusion(Integer.min(this.begin, anotherExclusion.getBegin()), Integer.max(this.end, anotherExclusion.getEnd()));
+        int newBegin = Integer.min(this.begin, other.getBegin());
+        int newEnd = Integer.max(this.end, other.getEnd());
+        return new Exclusion(newBegin, newEnd, newEnd - newBegin);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Exclusion)) {
+            return false;
+        }
+
+        Exclusion c = (Exclusion) o;
+
+        return c.begin == begin && c.end == end;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(begin + end);
     }
 }
