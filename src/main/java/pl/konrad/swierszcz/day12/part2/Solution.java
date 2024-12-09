@@ -25,7 +25,6 @@ public class Solution {
     }
 
     private static int getRedGroupSum(String toSearch) {
-        System.out.println(toSearch);
         var matcher = RED_GROUP_PATTERN.matcher(toSearch);
         int sum = 0;
         var exclusions = new ArrayList<Exclusion>();
@@ -65,5 +64,9 @@ public class Solution {
 
         return (brackets.get('[') <= brackets.get(']') && Objects.equals(brackets.get('{'), brackets.get('}'))) ||
                 (brackets.get('{') <= brackets.get('}') && Objects.equals(brackets.get('['), brackets.get(']')));
+    }
+
+    private static List<Exclusion> mergeOverlappingExclusions(List<Exclusion> exclusions) {
+        
     }
 }
