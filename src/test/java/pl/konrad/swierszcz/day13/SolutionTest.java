@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day13.part1;
+package pl.konrad.swierszcz.day13;
 
 import org.junit.jupiter.api.Test;
 import pl.konrad.swierszcz.InputReader;
@@ -12,7 +12,15 @@ class SolutionTest {
         //given
         //when//then
         assertThat(Solution.optimalArrangementHappiness(InputReader.readInput("day13/input.txt")))
-                .isEqualTo(111754);
+                .isEqualTo(709);
+    }
+
+    @Test
+    void shouldReturnDifferenceEqualToAoCAnswerPart2() {
+        //given
+        //when//then
+        assertThat(Solution.optimalArrangementHappiness(InputReader.readInput("day13/input2.txt")))
+                .isEqualTo(668);
     }
 
     @Test

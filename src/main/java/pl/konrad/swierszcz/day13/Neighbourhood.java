@@ -1,4 +1,4 @@
-package pl.konrad.swierszcz.day13.part1;
+package pl.konrad.swierszcz.day13;
 
 import java.util.HashSet;
 import java.util.List;
