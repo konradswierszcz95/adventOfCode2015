@@ -2,15 +2,17 @@ package pl.konrad.swierszcz.day14.part2;
 
 import pl.konrad.swierszcz.day14.Reindeer;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Solution {
     private Solution() {}
 
-    public static int maxReindeerDistance(List<String> inputs, int raceLength) {
+    public static long maxReindeerDistance(List<String> inputs, int raceLength) {
         var reindeers = inputs.stream()
                 .map(input -> input.split(" "))
                 .map(split -> new Reindeer(
@@ -22,23 +24,18 @@ public class Solution {
                 ))
                 .toList();
 
-        var extraPoints = reindeers.stream()
-                .map(r -> Map.entry(r.name(), 0))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        var leadershipPoints = IntStream.range(1, raceLength + 1)
+                .mapToObj(i -> getLeaders(reindeers, i))
+                .flatMap(List::stream)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        return reindeers.stream()
-                .mapToInt(r -> {
-                    int rest = raceLength % r.period();
-                    int fullPeriods = raceLength/ r.period();
-                    int notFullPeriodDistance = Math.min(rest, r.flyTime());
-
-                    return (fullPeriods * r.flyTime() + notFullPeriodDistance) * r.speed();
-                })
-                .max().orElseThrow();
+        return leadershipPoints.values()
+                .stream().max(Long::compareTo)
+                .orElse(0L);
     }
 
-    private static String getLeader(List<Reindeer> reindeers, int time) {
-        return reindeers.stream()
+    private static List<String> getLeaders(List<Reindeer> reindeers, int time) {
+        var distanceGroups = reindeers.stream()
                 .map(r -> {
                     int rest = time % r.period();
                     int fullPeriods = time / r.period();
@@ -46,6 +43,12 @@ public class Solution {
                     Integer distance = (fullPeriods * r.flyTime() + notFullPeriodDistance) * r.speed();
                     return Map.entry(r.name(), distance);
                 })
-                .max(Comparator.comparing(Map.Entry::getValue)).orElseThrow().getKey();
+                .collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+
+        int maxDistance = distanceGroups.keySet().stream()
+                .max(Integer::compareTo)
+                .orElse(0);
+
+        return distanceGroups.getOrDefault(maxDistance, Collections.emptyList());
     }
 }
